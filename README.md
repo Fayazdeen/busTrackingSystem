@@ -1,7 +1,7 @@
 # busTrackingSystem
 This repository has the step by step procedures and driver codes for building busTrackingSystem using AWS services
 
-Steps to be followed:
+# Steps to be followed:
 
 # 1, IAM role for lambda:
 * Go to IAM service. Click on **"Create Role"**
