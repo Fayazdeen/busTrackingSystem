@@ -3,14 +3,14 @@ This repository has the step by step procedures and driver codes for building bu
 
 # Steps to be followed:
 
-# 1, IAM role for lambda:
+  # 1, IAM role for lambda:
 * Go to IAM service. Click on **"Create Role"**
 * Choose "AWS Service" under trusted entity type.
 * In this case, we require AWS Lambda to read and write data to and from Dynamodb along with publishing the message to SNS.
 * Hence, attach the policies accordingly. For example, "AWSLambdaInvocation-DynamoDB" can be attached and then give a suitable name. You can further attach the policies at this section also.
 
 
-# 2, AWS Lambda:
+  # 2, AWS Lambda:
 
 * Create a **lambda function**
 * Give a suitable name under "Function Name"
@@ -20,7 +20,7 @@ This repository has the step by step procedures and driver codes for building bu
 * Also Configure the test event. Click on "Configure test event". Choose "Create test event". Give a suitable name and choose "Private". Under the Event JSON, paste the following test event: "{\"Lat\": 10.5, \"Long\": 11.1}"
 
 
-# 3, AWS IoT - Device side preparation: 
+  # 3, AWS IoT - Device side preparation: 
 
 * Login to the AWS Management Console with your IAM credentials which has autorisation to fully access the following AWS Services: IoT, Lambda, DynamoDB, SNS
 * Go to the **AWS IoT Core service**
@@ -37,7 +37,7 @@ This repository has the step by step procedures and driver codes for building bu
 * Now go to the following path and open the file for editing: "aws-iot-device-sdk-python-v2/samples/pubsub.py" and update the "pubsub.py" file as given in this repository.
 * Execute the "./start.sh" file to see the ${"Lat": 0.1, "Long": 2.1} message on the console.
   
-# 4, AWS IoT Rule Preparation:
+  # 4, AWS IoT Rule Preparation:
 
 * From the navigation pane, go to the following Rules page: AWS IoT > Message routing > Rules.
 * Choose **"Create rule"**
