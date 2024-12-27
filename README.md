@@ -4,6 +4,7 @@ This repository has the step by step procedures and driver codes for building bu
 # Steps to be followed:
 
   # 1, IAM role for lambda:
+  
 * Go to IAM service. Click on **"Create Role"**
 * Choose "AWS Service" under trusted entity type.
 * In this case, we require AWS Lambda to read and write data to and from Dynamodb along with publishing the message to SNS.
