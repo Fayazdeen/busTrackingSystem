@@ -19,6 +19,7 @@ This repository has the step by step procedures and driver codes for building bu
 * Under the "Change default execution role", choose use existing role and give the role that we have created in step 1.
 * In the code section, paste the content of "lambda_function.py".
 * Also Configure the test event. Click on "Configure test event". Choose "Create test event". Give a suitable name and choose "Private". Under the Event JSON, paste the following test event: "{\"Lat\": 10.5, \"Long\": 11.1}"
+* Deploy the lambda function for all the changes to reflect
 
 
   # 3, AWS IoT - Device side preparation: 
@@ -57,9 +58,53 @@ This repository has the step by step procedures and driver codes for building bu
 * You would have received the Notification from AWS SNS Service. Click on the link to subscribe for the topic.
 * Go back to the Topic that you have just created. And then copy the topic ARN. Now paste the topic ARN in the lambda code that you have created at Step no 4.
 * To validate the above Setting, Click on the Test option in the AWS lambda function that you have created. You should receive an email to the subscribed email ID.
- 
+
+  # 6, AWS DynamoDB table:
+
+* Go to AWS DynamoDB service.
+* Choose **"Tables > Create Table"**
+* Give the table name as "bus_live_location"
+* Give "bus_id" as Partition key and "timestamp" as Sort Key. Then create the table with default setting
+
+  # 7, AWS API Gateway:
+
+* Go to AWS API Gateway.
+* Choose **"API> Create API"**
+* Choose Rest API > Build > New API
+* Give a suitable name and choose Regional Option and then click "Create API"
+* Click on the create resource and then create the resource as "bus-location"
+* Later create one more resource under it using "{bus_id}"
+* Under the "{bus_id}" resource, click the create method option.
+* Enter the following detail
+  - Method type : Get
+  - Integration type: AWS Service
+  - AWS Region: Your region
+  - AWS service: DynamoDB
+  - HTTP method: POST
+  - Action type: Use action name
+  - Action name: Query
+  - Execution role: Create a role for APIGateway to query the dynamodb table and use it here
+  - Request body passthrough: When no template matches the request content-type header
+  - Mapping templates:
+      - application/json
+      - Template body:
+      -   {
+            "TableName": "bus_live_location", 
+            "PrimaryKey":"bus_id",
+            "SortKey":"timestamp",
+            "KeyConditionExpression": "bus_id = :v1", "ExpressionAttributeValues": {   
+                    ":v1": {        
+                        "S": "$input.params('bus_id')"   
+                    }    
+                },
+            "Limit":1, 
+            "ScanIndexForward":false 
+            }
+* Deploy the api with stage name as "test"
+
 # Demo: 
 
-Now from your device, run the "./start.sh" file. This should publish the message in the 'sdk/test/python' topic. This will trigger the Lambda code that you have created. 
+* Now from your device, run the "./start.sh" file. This should publish the message in the 'sdk/test/python' topic. This will trigger the Lambda code that you have created. 
 Eventually, after the suitable processing the message will be published to the subscribed email id.
+* Use the API that was created in the step 7 on your browser to get the current location of the bus.
 
